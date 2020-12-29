@@ -1,0 +1,42 @@
+Assume X is for Lon and y lat 
+
+
+Current (x,y)  
+
+maxium range  assume >> 1 mile 
+D= using google earth to find how much one mile change in Lon
+E=using google earth to find how much one mile change in Lat
+
+min(x)= current(x)- D
+max(x)= current(x)+ D
+min(y)= current(x)- E
+max(y)= current(x)+ E
+
+
+
+
+Intial guess >>  min(x), min (y)
+
+f(x)= a if x>b
+
+f(x)= 0 if x =b
+
+f(x)= -a if x<b
+
+
+f(y)= a if y>c
+
+f(y)= 0 if y =0
+
+f(y)= -a if y<c
+
+
+
+If  f(x) =a and f(y)=a >>> Next guess is max(x), max(y) 
+If  f(x) =-a and f(y)=-a >>> Next guess is max(x)/2, max(y)/2
+If  f(x) =-a and f(y)=a >>> Next guess is max(x)/2, max(y)
+If  f(x) =a and f(y)=-a >>> Next guess is max(x), max(y)/2
+
+
+
+
