@@ -40,3 +40,25 @@ If  f(x) =a and f(y)=-a >>> Next guess is max(x), max(y)/2
 
 
 
+f(x)= A cos (o)
+
+f(y)= A sin (o)
+
+
+
+o= invrese_tan(y2-y1)/(x2-x1)
+
+y2= F(y)   y
+x2= f(x)>> x
+
+x1= Current Latitide>>>> a
+y1=Current longtiude >>>>> b
+
+
+
+f(x)= 3 cos (invrese_tan(y2-y1)/(x2-x1))
+
+
+f(y)= 3 sin (invrese_tan(y-a)/(x-b))
+
+
