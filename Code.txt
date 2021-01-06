@@ -1,0 +1,57 @@
+
+
+
+First guess 
+ X 1 mile east  of current location 
+ Y 1 mile east  of current location 
+ We have a, b
+ 
+ Second guess 
+  X 1 mile West  of current location 
+ Y 1 mile south  of current location 
+ we measture a,b
+ 
+ if f(X) (first guess)< f(X) of second guess
+ Then
+Third guess 
+ X 1/2 mile east  of current location 
+Else
+Third guess 
+ X 1/2 mile west  of current location 
+
+
+ if f(y) (first guess)< f(y) of second guess
+Third guess
+ Y 1/2 mile south  of current location 
+else: 
+third guess
+ Y 1/2 mile North  of current location 
+ 
+ 
+ 
+ if f(X) (first guess)< f(X) of Third guess
+ X  .75 miles
+   .25 miles
+   .
+   .
+   .
+   
+   .
+   .
+   .
+   .
+   .
+
+
+
+
+
+
+
+
+Assume a and b are in the center of campus
+
+
+
+
+
