@@ -15,25 +15,22 @@ maxlon,maxlat,minlon,minlat=guessrange(a,b) ## This function i wrote to calculat
 longuess= maxlon
 latguess=maxlat
 
-br= Geodesic.WGS84.Inverse(a, b, longguess, latguess)['azi1'] ## bearing
+br= drone_sim(longuess,latguess)
 
 xspeed.append(5 * math.cos(br)) ## assuming constant speed of 5 m/s which refelect to 10 mph
 yspeed.append(5* math.sin(br))
 
-#Now we get the current drone location 
-a,b=newcord(a,b,longguess,latguess)
 
 # 2nd guess maxlon maxlat)
 longuess= minlon
 latguess=minlat
 
-br= Geodesic.WGS84.Inverse(a, b, longguess, latguess)['azi1'] ## bearing
+br= drone_sim(longuess,latguess)
 
 xspeed.append(5 * math.cos(br)) 
 xspeed.append(5 * math.cos(br))
 
-#aagain  we get the current drone location 
-a,b=newcord(a,b,longguess,latguess)
+
 
 if xspeed[1]> xspeed[2]:
   longuess= minlon/2
