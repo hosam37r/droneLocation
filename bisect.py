@@ -46,5 +46,18 @@ else:
   
 # Then we continue I need you to figure out how to loop this 
 
-
+define findx( guess,a):
+  xspeed=[0]
+  latguess=a
+  latguess=guess
+  i=1
+  while true:
+    br=drone_sim(longuess,latguess)
+    xspeed.append(5 * math.cos(br)) 
+    if xspeed[i]<.01:
+      return xpeed,longuess
+    if xspeed[i]> xspeed[i-1]:
+  longuess= minlon/2
+else:
+  longuess= maxlon/2
 
