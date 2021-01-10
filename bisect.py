@@ -1,5 +1,6 @@
 from geographiclib.geodesic import Geodesic # Make sure you install geographiclib  library before running this code.
 import math
+
 #Current drone location 
 a=-77.870654
 b= 34.221926 
@@ -11,53 +12,133 @@ yspeed[0]
 # Guess ranges.
 maxlon,maxlat,minlon,minlat=guessrange(a,b) ## This function i wrote to calculate the max range for a,b above with range of 1 mile.
 
-# First guess maxlon maxlat)
-longuess= maxlon
-latguess=maxlat
 
-br= drone_sim(longuess,latguess)
-
-xspeed.append(5 * math.cos(br)) ## assuming constant speed of 5 m/s which refelect to 10 mph
-yspeed.append(5* math.sin(br))
-
-
-# 2nd guess maxlon maxlat)
-longuess= minlon
-latguess=minlat
-
-br= drone_sim(longuess,latguess)
-
+br= drone_sim(maxlon,b)
 xspeed.append(5 * math.cos(br)) 
+
+br= drone_sim(minlon,b)
 xspeed.append(5 * math.cos(br))
 
 
 
 if xspeed[1]> xspeed[2]:
-  longuess= minlon/2
+  xspeedlist, lon_fix=findx(minlon,a,b,0)
 else:
-  longuess= maxlon/2
+  xspeedlist, lon_fix=findx(maxlon,a,b,1)
+  
+ 
+br= drone_sim(a,maxlat)
+yspeed.append(5 * math.sin(br)) 
 
-if uspeed[1]> yspeed[2]:
-  latguess= minlat/2
+br= drone_sim(a,minlat)
+yspeed.append(5 * math.sin(br))
+
+
+
+if yspeed[1]> yspeed[2]:
+  yspeedlist, lat_fix=findy(minlat,a,b,0)
 else:
-  latguess= maxlat/2
+  yspeedlist, lon_fix=findx(maxlat,a,b,1)
   
 
-  
-# Then we continue I need you to figure out how to loop this 
 
-define findx( guess,a):
-  xspeed=[0]
-  latguess=a
-  latguess=guess
+  
+
+  ###### below this point is functions
+
+  ###function 1 bi-section loop to find the lon
+define findx( guess,a,b,f):
+  x_speed=[0]
   i=1
+  if a=1:
+    lower =a
+    upper=guess
+  else:
+    lower=guess
+    upper=a
+ guess=lower+(upper-lower)/2
   while true:
-    br=drone_sim(longuess,latguess)
-    xspeed.append(5 * math.cos(br)) 
-    if xspeed[i]<.01:
-      return xpeed,longuess
-    if xspeed[i]> xspeed[i-1]:
-  longuess= minlon/2
-else:
-  longuess= maxlon/2
+    br=drone_sim(guess,b)
+    x_speed.append(5 * math.cos(br)) 
+    if x_speed[i]<.01:
+      return x_speed,guess
+    if x_speed[i]> x_speed[i-1]:
+      upper=guess
+      guess=lower+(upper-lower)/2
+  else:
+     lower=guess
+      guess=lower+(upper-lower)/2
+
+ 
+###function 1 bi-section loop to find the lat.
+
+define findy( guess,a,b,f):
+  y_speed=[0]
+  i=1
+  if a=1:
+    lower =b
+    upper=guess
+  else:
+    lower=guess
+    upper=b
+ guess=lower+(upper-lower)/2
+  while true:
+    br=drone_sim(a,guess)
+    yspeed.append(5 * math.cos(br)) 
+    if y_speed[i]<.01:
+      return y_speed,guess
+    if y_speed[i]> y_speed[i-1]:
+      upper=guess
+      guess=lower+(upper-lower)/2
+  else:
+     lower=guess
+      guess=lower+(upper-lower)/2
+      
+## function 3. it finds the maximum range of guesses      
+def guessrange(lon,lat): # Lon, Lat>>current.
+     R = 6378.1 #Radius of the Earth
+     lat1 = math.radians(lat) #Current lat point converted to radians
+     lon1 = math.radians(lon) #Current long point converted to radians
+     d = 1.609 #Distance in km>>
+     brng1=0
+     brng2=math.pi/2
+     brng3=math.pi
+     brng4=math.pi*1.5
+
+     maxlat = math.asin( math.sin(lat1)*math.cos(d/R) + math.cos(lat1)*math.sin(d/R)*math.cos(brng1))
+     lat2 = math.asin( math.sin(lat1)*math.cos(d/R) + math.cos(lat1)*math.sin(d/R)*math.cos(brng2))
+     maxlon = lon1 + math.atan2(math.sin(brng2)*math.sin(d/R)*math.cos(lat1),math.cos(d/R)-math.sin(lat1)*math.sin(lat2))
+     minlat = math.asin( math.sin(lat1)*math.cos(d/R) + math.cos(lat1)*math.sin(d/R)*math.cos(brng3))
+     lat2 = math.asin( math.sin(lat1)*math.cos(d/R) + math.cos(lat1)*math.sin(d/R)*math.cos(brng4))
+     minlon = lon1 + math.atan2(math.sin(brng4)*math.sin(d/R)*math.cos(lat1),math.cos(d/R)-math.sin(lat1)*math.sin(lat2))
+
+     maxlat = math.degrees(maxlat)
+     maxlon = math.degrees(maxlon)
+     minlat = math.degrees(minlat)
+     minlon = math.degrees(minlon)
+
+     return maxlon, maxlat,minlon, minlat
+      
+    
+    
+    
+    
+## Function 4 to simulate drone movement 
+
+##The prupose of this function is to simulate drone movement. To find which bearing it is going to head to based on the broadcasted Coordinates 
+import math
+from geographiclib.geodesic import Geodesic # Make sure you install geographiclib  library before running this code.
+
+def drone_sim(lon,lat): # Lon, Lat>>braodcasted. lonb,latb>> Where the subject is heading ( in our case these are the broadcasted coordniates) 
+     
+     #Launch location of drone. 
+     ## It is hardcoded here. The puprose of this code is to simulate 
+     lnch_lon= -77.873886
+     lnch_lat=34.241753
+     
+     R = 6378.1 #Radius of the Earth
+     brng = Geodesic.WGS84.Inverse(lon, lat, lnch_lon, lnch_lat)['azi1']  # Calculate the bearing of the travel
+     
+     
+     return brng
 
