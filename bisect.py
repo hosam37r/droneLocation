@@ -7,10 +7,10 @@ b= 34.221926
 
 ### Lets define list of how x direction speed and y direction speed change through the code
 xpeed=[0]
-yspeed[0]
+yspeed=[0]
 
 # Guess ranges.
-maxlon,maxlat,minlon,minlat=guessrange(a,b) ## This function i wrote to calculate the max range for a,b above with range of 1 mile.
+maxlon,maxlat,minlon,minlat= guessrange(a,b) ## This function i wrote to calculate the max range for a,b above with range of 1 mile.
 
 
 br= drone_sim(maxlon,b)
@@ -47,16 +47,16 @@ else:
   ###### below this point is functions
 
   ###function 1 bi-section loop to find the lon
-define findx( guess,a,b,f):
+def findx( guess,a,b,f):
   x_speed=[0]
   i=1
-  if a=1:
+  if a==1:
     lower =a
     upper=guess
   else:
     lower=guess
     upper=a
- guess=lower+(upper-lower)/2
+  guess=lower+(upper-lower)/2
   while true:
     br=drone_sim(guess,b)
     x_speed.append(5 * math.cos(br)) 
@@ -65,23 +65,24 @@ define findx( guess,a,b,f):
     if x_speed[i]> x_speed[i-1]:
       upper=guess
       guess=lower+(upper-lower)/2
-  else:
-     lower=guess
+    else:
+      lower=guess
       guess=lower+(upper-lower)/2
+    i=i+1
 
  
 ###function 1 bi-section loop to find the lat.
 
-define findy( guess,a,b,f):
+def findy( guess,a,b,f):
   y_speed=[0]
   i=1
-  if a=1:
+  if a==1:
     lower =b
     upper=guess
   else:
     lower=guess
     upper=b
- guess=lower+(upper-lower)/2
+  guess=lower+(upper-lower)/2
   while true:
     br=drone_sim(a,guess)
     yspeed.append(5 * math.cos(br)) 
@@ -90,9 +91,10 @@ define findy( guess,a,b,f):
     if y_speed[i]> y_speed[i-1]:
       upper=guess
       guess=lower+(upper-lower)/2
-  else:
-     lower=guess
+    else:
+      lower=guess
       guess=lower+(upper-lower)/2
+    i=i+1
       
 ## function 3. it finds the maximum range of guesses      
 def guessrange(lon,lat): # Lon, Lat>>current.
