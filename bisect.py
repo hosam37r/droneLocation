@@ -1,11 +1,15 @@
 from geographiclib.geodesic import Geodesic # Make sure you install geographiclib  library before running this code.
 import math
 
+#########################
+#First we define the functions
+############################################
+####### Function 1 to find max range of lon and lat 
 def guessrange(lon,lat): # Lon, Lat>>current.
      R = 6378.1 #Radius of the Earth
      lat1 = math.radians(lat) #Current lat point converted to radians
      lon1 = math.radians(lon) #Current long point converted to radians
-     d = 1.609 #Distance in km>>
+     d = 1.609 #Distance in km>> 1 mile
      brng1=0
      brng2=math.pi/2
      brng3=math.pi
@@ -26,6 +30,7 @@ def guessrange(lon,lat): # Lon, Lat>>current.
      return maxlon, maxlat,minlon, minlat
 
 
+#### function 2 to bisect for lon
 def findx( guess,a,b,f):
   x_speed=[0]
   i=1
@@ -53,6 +58,7 @@ def findx( guess,a,b,f):
 
     i=i+1
   
+   ########fucntion 3 to bisect for lat  
 def findy( guess,a,b,f):
   y_speed=[0]
   i=1
@@ -84,7 +90,7 @@ def findy( guess,a,b,f):
   
   
 
-
+### Function 4 to simulate drone movement. 
 def drone_sim(lon,lat): # Lon, Lat>>braodcasted. lonb,latb>> Where the subject is heading ( in our case these are the broadcasted coordniates) 
      
      #Launch location of drone. 
@@ -99,17 +105,23 @@ def drone_sim(lon,lat): # Lon, Lat>>braodcasted. lonb,latb>> Where the subject i
      return brng
 
 
-
+#####################################################################################
+###Main function starts here
+#a,b are the lon and lat where the drone is spotted before braodcasting anything
 a=-77.870654
 b= 34.221926 
 
-
+##List to compare the speed of min(lat/lon) max(lat/lon)
 xspeed=[0]
 yspeed=[0]
-maxlon,maxlat,minlon,minlat= guessrange(a,b) ## This function i wrote to calculate the max range for a,b above with range of 1 mile.
+
+maxlon,maxlat,minlon,minlat= guessrange(a,b) ## This function i wrote to calculate the max range for lon lat which is  in the range of 1 mile from a,b above
+
+## First broadcast happens here we broadcast max then min and see which one generate less speed.
 br= drone_sim(maxlon,b)
 xspeed.append(5 * math.cos(br* math.pi / 180)) 
 
+# to find the guess bounderies first we check which maxlon or minlon generate lessspeed
 br= drone_sim(minlon,b)
 xspeed.append(5 * math.cos(br* math.pi / 180))
 if xspeed[1]> xspeed[2]:
@@ -119,8 +131,9 @@ else:
   f=0
   guess=minlon
 
-print(findx( guess,a,b,f))
+print(findx( guess,a,b,f)) ## where guess is the intial guess. f is to show we selected maxlon or min lon based on the tedt in lines 124-132.
 
+#Repeat above to find lat.
 br= drone_sim(a,maxlat)
 yspeed.append(5 * math.sin(br* math.pi / 180)) 
 
